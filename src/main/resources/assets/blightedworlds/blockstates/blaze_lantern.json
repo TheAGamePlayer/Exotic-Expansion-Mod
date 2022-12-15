@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"hanging=false": {
+			"model": "blightedworlds:block/blaze_lantern"
+		},
+		"hanging=true": {
+			"model": "blightedworlds:block/blaze_lantern_hanging"
+		}
+	}
+}

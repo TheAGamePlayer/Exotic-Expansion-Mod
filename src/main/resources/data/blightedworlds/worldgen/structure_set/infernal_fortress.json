@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 30084232,
+    "separation": 12,
+    "spacing": 81
+  },
+  "structures": [
+    {
+      "structure": "blightedworlds:infernal_fortress",
+      "weight": 1
+    }
+  ]
+}

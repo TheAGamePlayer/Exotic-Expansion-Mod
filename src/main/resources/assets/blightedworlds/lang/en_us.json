@@ -1,0 +1,13 @@
+{
+	"itemGroup.blightedworlds": "Blighted Worlds",
+	
+	"block.blightedworlds.red_nether_brick_fence": "Red Nether Brick Fence",
+	"block.blightedworlds.blaze_lantern": "Blaze Lantern",
+	"block.blightedworlds.ancient_nether_altar": "Ancient Nether Altar",
+	"block.blightedworlds.ancient_nether_portal": "Ancient Nether Portal",
+	
+	"item.blightedworlds.altar_activation_orb": "Altar Activation Orb",
+	"item.blightedworlds.spawner_slime_spawn_egg": "Spawner Slime Spawn Egg",
+
+	"entity.blightedworlds.spawner_slime": "Spawner Slime"
+}
