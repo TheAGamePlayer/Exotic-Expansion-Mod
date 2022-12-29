@@ -34,20 +34,19 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public final class AncientNetherAltarBlock extends Block {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty HAS_ORB = BWBlockStateProperties.ORB;
-	public static final BooleanProperty HAS_PORTAL = BWBlockStateProperties.HAS_PORTAL;
 	private static final VoxelShape BASE_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D);
 	private static final VoxelShape EYE_SHAPE = Block.box(4.0D, 9.0D, 4.0D, 12.0D, 12.0D, 12.0D);
 	private static final VoxelShape FULL_SHAPE = Shapes.or(BASE_SHAPE, EYE_SHAPE);
 
 	public AncientNetherAltarBlock(final BlockBehaviour.Properties propertiesIn) {
 		super(propertiesIn);
-		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HAS_ORB, Boolean.valueOf(false)).setValue(HAS_PORTAL, Boolean.valueOf(false)));
+		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HAS_ORB, Boolean.valueOf(false)));
 	}
 
 	@Override
 	public final InteractionResult use(final BlockState stateIn, final Level levelIn, final BlockPos posIn, final Player playerIn, final InteractionHand handIn, final BlockHitResult hitIn) {
 		if (stateIn.getValue(HAS_ORB) == true) {
-			if (this.placedPortal(stateIn, levelIn, posIn) && stateIn.getValue(HAS_PORTAL)) {
+			if (this.placedPortal(stateIn, levelIn, posIn)) {
 				playerIn.moveTo(posIn, playerIn.getYRot(), -90.00F);
 				playerIn.lerpMotion(0.0D, 1.0D, 0.0D);
 			}
@@ -57,12 +56,10 @@ public final class AncientNetherAltarBlock extends Block {
 	}
 
 	public final boolean placedPortal(final BlockState stateIn, final LevelAccessor levelIn, final BlockPos posIn) { //LevelAccessor used for Auto Activation in Ancient Nether
-		final BlockPos height = posIn.above(5);
+		final BlockPos height = posIn.above(6);
 		if (levelIn.getBlockState(height) == Blocks.AIR.defaultBlockState()) {
-			if (stateIn.getValue(HAS_ORB) && levelIn.getBlockState(height) == Blocks.AIR.defaultBlockState() && levelIn.getBlockState(posIn).getBlock() == BWBlocks.ANCIENT_NETHER_ALTAR.get()) {
+			if (stateIn.getValue(HAS_ORB) && levelIn.getBlockState(height) == Blocks.AIR.defaultBlockState() && levelIn.getBlockState(posIn).getBlock() == BWBlocks.ANCIENT_NETHER_ALTAR.get())
 				levelIn.setBlock(height, BWBlocks.ANCIENT_NETHER_PORTAL.get().defaultBlockState(), 2);
-				levelIn.setBlock(posIn, stateIn.setValue(HAS_PORTAL, Boolean.valueOf(true)), 2);
-			}
 			return false;
 		}
 		return true;
@@ -126,7 +123,7 @@ public final class AncientNetherAltarBlock extends Block {
 
 	@Override
 	protected final void createBlockStateDefinition(final StateDefinition.Builder<Block, BlockState> stateDefinitionIn) {
-		stateDefinitionIn.add(FACING, HAS_ORB, HAS_PORTAL);
+		stateDefinitionIn.add(FACING, HAS_ORB);
 	}
 
 	@Override

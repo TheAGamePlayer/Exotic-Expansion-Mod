@@ -70,6 +70,7 @@ public abstract class SpawnerSlimeSpawner { //Code from BaseSpawner.class
 	public void serverTick(final ServerLevel levelIn, final BlockPos posIn, final boolean isMadIn) {
 		this.minSpawnDelay = isMadIn ? 150 : 200;
 		this.maxSpawnDelay = isMadIn ? 600 : 800;
+		this.maxNearbyEntities = isMadIn ? 8 : 6;
 		if (this.isNearPlayer(levelIn, posIn)) {
 			if (this.spawnDelay < 0)
 				this.delay(levelIn, posIn);

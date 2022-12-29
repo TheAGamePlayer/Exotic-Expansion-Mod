@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import dev.theagameplayer.blightedworlds.data.BWRegistriesDatapackProvider;
+import dev.theagameplayer.blightedworlds.data.BWSpriteSourceProvider;
 import dev.theagameplayer.blightedworlds.data.loot.BWLootTableProvider;
 import dev.theagameplayer.blightedworlds.data.recipes.packs.BWRecipeProvider;
 import dev.theagameplayer.blightedworlds.data.tags.BWBiomeTagsProvider;
@@ -99,8 +100,8 @@ public final class BlightedWorldsMod {
 		final ExistingFileHelper existingFileHelper = eventIn.getExistingFileHelper();
 		final CompletableFuture<HolderLookup.Provider> lookupProvider = eventIn.getLookupProvider();
 		if (eventIn.includeServer()) {
-			generator.addProvider(true, new BWRegistriesDatapackProvider(generator.getPackOutput()));
-			generator.addProvider(true, BWRegistriesDatapackProvider.levelStemProvider(generator.getPackOutput(), existingFileHelper));
+			generator.addProvider(true, new BWRegistriesDatapackProvider(generator.getPackOutput(), lookupProvider));
+			generator.addProvider(true, new BWSpriteSourceProvider(generator.getPackOutput(), existingFileHelper));
 			generator.addProvider(true, new BWLootTableProvider(generator.getPackOutput()));
 			generator.addProvider(true, new BWRecipeProvider(generator.getPackOutput()));
 			generator.addProvider(true, new BWBiomeTagsProvider(generator.getPackOutput(), lookupProvider, existingFileHelper));

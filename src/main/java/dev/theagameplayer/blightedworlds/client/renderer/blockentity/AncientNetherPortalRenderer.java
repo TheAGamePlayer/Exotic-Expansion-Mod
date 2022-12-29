@@ -1,188 +1,91 @@
 package dev.theagameplayer.blightedworlds.client.renderer.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 
-import dev.theagameplayer.blightedworlds.BlightedWorldsMod;
-import dev.theagameplayer.blightedworlds.registries.other.BWModelLayers;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.model.data.ModelData;
 
 public final class AncientNetherPortalRenderer<BE extends BlockEntity> implements BlockEntityRenderer<BE> {
-	private static final Material PORTAL_LOCATION = new Material(InventoryMenu.BLOCK_ATLAS, new ResourceLocation(BlightedWorldsMod.MODID, "entity/blockentity/ancient_nether_portal"));
-	private static final Material PORTAL_RIM_LOCATION = new Material(InventoryMenu.BLOCK_ATLAS, new ResourceLocation(BlightedWorldsMod.MODID, "entity/blockentity/ancient_nether_portal_2"));
-	private final ModelPart portal;
-	private final ModelPart rim, rim2, rim3;
+	private final BlockRenderDispatcher dispatcher;
+	private float rotY, rotX, rotZ, scale;
+	private int rotationsY, rotationsX, rotationsZ;
+	private boolean flag, flag2, flag3, flag4;
 
 	public AncientNetherPortalRenderer(final BlockEntityRendererProvider.Context contextIn) {
-		final ModelPart modelPart = contextIn.bakeLayer(BWModelLayers.ANCIENT_NETHER_PORTAL);
-		this.portal = modelPart.getChild("portal");
-		this.rim = modelPart.getChild("rim");
-		this.rim2 = modelPart.getChild("rim2");
-		this.rim3 = modelPart.getChild("rim3");
+		this.dispatcher = contextIn.getBlockRenderDispatcher();
+		this.rotationsY = 1;
+		this.rotationsX = 1;
+		this.rotationsZ = 1;
 	}
-
-	public static final LayerDefinition createBodyLayer() {
-		final MeshDefinition meshDefinition = new MeshDefinition();
-		final PartDefinition partDefinition = meshDefinition.getRoot();
-		partDefinition.addOrReplaceChild("portal", CubeListBuilder.create()
-				.texOffs(0, 4).addBox(-16.0F, -2.0F, 0.0F, 16.0F, 0.0F, 16.0F)
-				.texOffs(0, 12).addBox(-16.0F, -2.0F, -1.0F, 16.0F, 0.0F, 1.0F)
-				.texOffs(0, 13).addBox(-15.0F, -2.0F, -2.0F, 14.0F, 0.0F, 1.0F)
-				.texOffs(0, 14).addBox(-13.0F, -2.0F, -3.0F, 10.0F, 0.0F, 1.0F)
-				.texOffs(0, 15).addBox(-10.0F, -2.0F, -4.0F, 4.0F, 0.0F, 1.0F)
-				.texOffs(0, 0).addBox(-10.0F, -2.0F, 19.0F, 4.0F, 0.0F, 1.0F)
-				.texOffs(0, 1).addBox(-13.0F, -2.0F, 18.0F, 10.0F, 0.0F, 1.0F)
-				.texOffs(0, 2).addBox(-15.0F, -2.0F, 17.0F, 14.0F, 0.0F, 1.0F)
-				.texOffs(0, 3).addBox(-16.0F, -2.0F, 16.0F, 16.0F, 0.0F, 1.0F)
-				.texOffs(0, 4).addBox(0.0F, -2.0F, 0.0F, 1.0F, 0.0F, 16.0F)
-				.texOffs(0, 5).addBox(1.0F, -2.0F, 1.0F, 1.0F, 0.0F, 14.0F)
-				.texOffs(0, 6).addBox(2.0F, -2.0F, 3.0F, 1.0F, 0.0F, 10.0F)
-				.texOffs(0, 7).addBox(3.0F, -2.0F, 6.0F, 1.0F, 0.0F, 4.0F)
-				.texOffs(0, 7).addBox(-20.0F, -2.0F, 6.0F, 1.0F, 0.0F, 4.0F)
-				.texOffs(0, 6).addBox(-19.0F, -2.0F, 3.0F, 1.0F, 0.0F, 10.0F)
-				.texOffs(0, 5).addBox(-18.0F, -2.0F, 1.0F, 1.0F, 0.0F, 14.0F)
-				.texOffs(0, 4).addBox(-17.0F, -2.0F, 0.0F, 1.0F, 0.0F, 16.0F), PartPose.offset(0.0F, 24.0F, 0.0F));
-		partDefinition.addOrReplaceChild("rim", CubeListBuilder.create()
-				.texOffs(0, 0).addBox(-10.0F, 0.0F, -3.0F, 4.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-6.0F, 0.0F, -2.0F, 3.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-3.0F, 0.0F, -1.0F, 2.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-1.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(0.0F, 0.0F, 1.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(1.0F, 0.0F, 2.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(2.0F, 0.0F, 3.0F, 1.0F, 2.0F, 2.0F)
-				.texOffs(0, 0).addBox(3.0F, 0.0F, 5.0F, 1.0F, 2.0F, 3.0F)
-				.texOffs(0, 0).addBox(4.0F, 0.0F, 8.0F, 1.0F, 2.0F, 4.0F)
-				.texOffs(0, 0).addBox(3.0F, 0.0F, 12.0F, 1.0F, 2.0F, 3.0F)
-				.texOffs(0, 0).addBox(2.0F, 0.0F, 15.0F, 1.0F, 2.0F, 2.0F)
-				.texOffs(0, 0).addBox(1.0F, 0.0F, 17.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(0.0F, 0.0F, 18.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-1.0F, 0.0F, 19.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-3.0F, 0.0F, 20.0F, 2.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-6.0F, 0.0F, 21.0F, 3.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-10.0F, 0.0F, 22.0F, 4.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-13.0F, 0.0F, 21.0F, 3.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-15.0F, 0.0F, 20.0F, 2.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-16.0F, 0.0F, 19.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-17.0F, 0.0F, 18.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-18.0F, 0.0F, 17.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-19.0F, 0.0F, 15.0F, 1.0F, 2.0F, 2.0F)
-				.texOffs(0, 0).addBox(-20.0F, 0.0F, 12.0F, 1.0F, 2.0F, 3.0F)
-				.texOffs(0, 0).addBox(-21.0F, 0.0F, 8.0F, 1.0F, 2.0F, 4.0F)
-				.texOffs(0, 0).addBox(-20.0F, 0.0F, 5.0F, 1.0F, 2.0F, 3.0F)
-				.texOffs(0, 0).addBox(-19.0F, 0.0F, 3.0F, 1.0F, 2.0F, 2.0F)
-				.texOffs(0, 0).addBox(-18.0F, 0.0F, 2.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-17.0F, 0.0F, 1.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-16.0F, 0.0F, 0.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-15.0F, 0.0F, -1.0F, 2.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-13.0F, 0.0F, -2.0F, 3.0F, 2.0F, 1.0F), PartPose.offset(0.0F, 21.0F, -2.0F));
-		partDefinition.addOrReplaceChild("rim2", CubeListBuilder.create()
-				.texOffs(0, 0).addBox(-23.0F, -4.0F, 6.0F, 2.0F, 4.0F, 4.0F)
-				.texOffs(0, 0).addBox(-22.0F, -4.0F, 3.0F, 2.0F, 4.0F, 3.0F)
-				.texOffs(0, 0).addBox(-21.0F, -4.0F, 1.0F, 2.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-20.0F, -4.0F, 0.0F, 2.0F, 4.0F, 1.0F)
-				.texOffs(0, 0).addBox(-19.0F, -4.0F, -1.0F, 2.0F, 4.0F, 1.0F)
-				.texOffs(0, 0).addBox(-17.0F, -4.0F, -3.0F, 1.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-16.0F, -4.0F, -4.0F, 1.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-15.0F, -4.0F, -5.0F, 2.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-13.0F, -4.0F, -6.0F, 3.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-10.0F, -4.0F, -7.0F, 4.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-6.0F, -4.0F, -6.0F, 3.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-3.0F, -4.0F, -5.0F, 2.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-1.0F, -4.0F, -4.0F, 1.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(0.0F, -4.0F, -3.0F, 1.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(1.0F, -4.0F, -1.0F, 2.0F, 4.0F, 1.0F)
-				.texOffs(0, 0).addBox(2.0F, -4.0F, 0.0F, 2.0F, 4.0F, 1.0F)
-				.texOffs(0, 0).addBox(3.0F, -4.0F, 1.0F, 2.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(4.0F, -4.0F, 3.0F, 2.0F, 4.0F, 3.0F)
-				.texOffs(0, 0).addBox(5.0F, -4.0F, 6.0F, 2.0F, 4.0F, 4.0F)
-				.texOffs(0, 0).addBox(4.0F, -4.0F, 10.0F, 2.0F, 4.0F, 3.0F)
-				.texOffs(0, 0).addBox(3.0F, -4.0F, 13.0F, 2.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(2.0F, -4.0F, 15.0F, 2.0F, 4.0F, 1.0F)
-				.texOffs(0, 0).addBox(1.0F, -4.0F, 16.0F, 2.0F, 4.0F, 1.0F)
-				.texOffs(0, 0).addBox(0.0F, -4.0F, 17.0F, 1.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-1.0F, -4.0F, 18.0F, 1.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-3.0F, -4.0F, 19.0F, 2.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-6.0F, -4.0F, 20.0F, 3.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-10.0F, -4.0F, 21.0F, 4.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-13.0F, -4.0F, 20.0F, 3.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-15.0F, -4.0F, 19.0F, 2.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-16.0F, -4.0F, 18.0F, 1.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-17.0F, -4.0F, 17.0F, 1.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-19.0F, -4.0F, 16.0F, 2.0F, 4.0F, 1.0F)
-				.texOffs(0, 0).addBox(-20.0F, -4.0F, 15.0F, 2.0F, 4.0F, 1.0F)
-				.texOffs(0, 0).addBox(-21.0F, -4.0F, 13.0F, 2.0F, 4.0F, 2.0F)
-				.texOffs(0, 0).addBox(-22.0F, -4.0F, 10.0F, 2.0F, 4.0F, 3.0F)
-				.texOffs(0, 0).addBox(-18.0F, -4.0F, 17.0F, 1.0F, 4.0F, 1.0F)
-				.texOffs(0, 0).addBox(-18.0F, -4.0F, -2.0F, 1.0F, 4.0F, 1.0F)
-				.texOffs(0, 0).addBox(1.0F, -4.0F, -2.0F, 1.0F, 4.0F, 1.0F)
-				.texOffs(0, 0).addBox(1.0F, -4.0F, 17.0F, 1.0F, 4.0F, 1.0F), PartPose.offset(0.0F, 24.0F, 0.0F));
-		partDefinition.addOrReplaceChild("rim3", CubeListBuilder.create()
-				.texOffs(0, 0).addBox(-10.0F, -3.0F, -8.0F, 4.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-6.0F, -3.0F, -7.0F, 3.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-3.0F, -3.0F, -6.0F, 2.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-1.0F, -3.0F, -5.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(0.0F, -3.0F, -4.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(1.0F, -3.0F, -3.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(2.0F, -3.0F, -2.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(3.0F, -3.0F, -1.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(4.0F, -3.0F, 0.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(5.0F, -3.0F, 1.0F, 1.0F, 2.0F, 2.0F)
-				.texOffs(0, 0).addBox(5.0F, -3.0F, 13.0F, 1.0F, 2.0F, 2.0F)
-				.texOffs(0, 0).addBox(4.0F, -3.0F, 15.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(3.0F, -3.0F, 16.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(2.0F, -3.0F, 17.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(1.0F, -3.0F, 18.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(0.0F, -3.0F, 19.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-1.0F, -3.0F, 20.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-3.0F, -3.0F, 21.0F, 2.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-6.0F, -3.0F, 22.0F, 3.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-10.0F, -3.0F, 23.0F, 4.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-13.0F, -3.0F, 22.0F, 3.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-15.0F, -3.0F, 21.0F, 2.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-16.0F, -3.0F, 20.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-17.0F, -3.0F, 19.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-18.0F, -3.0F, 18.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-19.0F, -3.0F, 17.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-20.0F, -3.0F, 16.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-21.0F, -3.0F, 15.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-22.0F, -3.0F, 13.0F, 1.0F, 2.0F, 2.0F)
-				.texOffs(0, 0).addBox(-23.0F, -3.0F, 10.0F, 1.0F, 2.0F, 3.0F)
-				.texOffs(0, 0).addBox(-24.0F, -3.0F, 6.0F, 1.0F, 2.0F, 4.0F)
-				.texOffs(0, 0).addBox(-23.0F, -3.0F, 3.0F, 1.0F, 2.0F, 3.0F)
-				.texOffs(0, 0).addBox(-22.0F, -3.0F, 1.0F, 1.0F, 2.0F, 2.0F)
-				.texOffs(0, 0).addBox(-21.0F, -3.0F, 0.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-20.0F, -3.0F, -1.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-19.0F, -3.0F, -2.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-18.0F, -3.0F, -3.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-17.0F, -3.0F, -4.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-16.0F, -3.0F, -5.0F, 1.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-15.0F, -3.0F, -6.0F, 2.0F, 2.0F, 1.0F)
-				.texOffs(0, 0).addBox(-13.0F, -3.0F, -7.0F, 3.0F, 2.0F, 1.0F), PartPose.offset(0.0F, 24.0F, 0.0F));
-		return LayerDefinition.create(meshDefinition, 16, 16);
-	}
-
+	
 	@Override
 	public final void render(final BE blockEntityIn, final float partialTicksIn, final PoseStack poseStackIn, final MultiBufferSource bufferIn, final int combinedLightIn, final int combinedOverlayIn) {
-		final VertexConsumer vertexConsumer = PORTAL_LOCATION.buffer(bufferIn, RenderType::entityTranslucent);
-		final VertexConsumer vertexConsumer1 = PORTAL_RIM_LOCATION.buffer(bufferIn, RenderType::entityTranslucent);
+		final Level level = blockEntityIn.getLevel();
+		final BlockPos pos = blockEntityIn.getBlockPos();
+		final BlockState state = blockEntityIn.getBlockState();
+		final BakedModel model = this.dispatcher.getBlockModel(state);
+		final float scale = 2.0F + 0.5F * (float)Math.cos(Math.PI * this.scale - Math.PI);
+		final float maxY = 360.0F * this.rotationsY;
+		final float argb = this.getARGB(maxY);
 		poseStackIn.pushPose();
-		this.portal.render(poseStackIn, vertexConsumer, combinedLightIn, combinedOverlayIn);
-		this.rim.render(poseStackIn, vertexConsumer1, combinedLightIn, combinedOverlayIn);
-		this.rim2.render(poseStackIn, vertexConsumer1, combinedLightIn, combinedOverlayIn);
-		this.rim3.render(poseStackIn, vertexConsumer1, combinedLightIn, combinedOverlayIn);
+        poseStackIn.translate(0.5F, 0.5F, 0.5F);
+        poseStackIn.mulPose(Axis.YP.rotationDegrees(maxY/2 + (maxY/2) * (float)Math.cos((1/maxY) * Math.PI * this.rotY - Math.PI)));
+        poseStackIn.mulPose(Axis.XP.rotationDegrees(this.rotationsX/2 + (this.rotationsX/2) * (float)Math.cos((1/this.rotationsX) * Math.PI * this.rotX - Math.PI)));
+        poseStackIn.mulPose(Axis.ZP.rotationDegrees(this.rotationsZ/2 + (this.rotationsZ/2) * (float)Math.cos((1/this.rotationsZ) * Math.PI * this.rotZ - Math.PI)));
+        poseStackIn.scale(scale, scale, scale);
+		poseStackIn.translate(-0.5F, -0.5F, -0.5F);
+		for (final RenderType renderType : model.getRenderTypes(state, RandomSource.create(state.getSeed(pos)), ModelData.EMPTY))
+			this.dispatcher.getModelRenderer().tesselateBlock(level, model, state, pos, poseStackIn, bufferIn.getBuffer(renderType), false, RandomSource.create(), state.getSeed(pos), OverlayTexture.NO_OVERLAY, ModelData.EMPTY, renderType);
 		poseStackIn.popPose();
+		final float rotYMult = 3.0F - this.scale;
+		final float rotXMult = this.scale * 0.0001F;
+		final float rotZMult = this.scale * 0.0001F;
+		final float scaleMult = 0.001F;
+		this.rotY += this.flag ? -rotYMult : rotYMult;
+		this.rotX += this.flag2 ? -rotXMult : rotXMult;
+		this.rotZ += this.flag3 ? -rotZMult : rotZMult;
+		this.scale += this.flag4 ? -scaleMult : scaleMult;
+		if (this.rotY >= maxY) {
+			this.flag = true;
+		} else if (this.rotY < 0.0F) {
+			this.flag = false;
+			this.rotationsY = 5 + (4 - level.random.nextInt(level.random.nextInt(5) + 1));
+		}
+		if (this.rotX >= this.rotationsX) {
+			this.flag2 = true;
+		} else if (this.rotX < 0.0F) {
+			this.flag2 = false;
+			this.rotationsX = level.random.nextInt(level.random.nextInt(10) + 1) + 1;
+		}
+		if (this.rotZ >= this.rotationsZ) {
+			this.flag3 = true;
+		} else if (this.rotZ < 0.0F) {
+			this.flag3 = false;
+			this.rotationsZ = level.random.nextInt(level.random.nextInt(10) + 1) + 1;
+		}
+		if (this.scale >= 1.0F) {
+			this.flag4 = true;
+		} else if (this.scale < 0.0F) {
+			this.flag4 = false;
+		}
+	}
+	
+	private final float getARGB(final float maxYIn) {
+		float dist = Math.abs(this.rotY - maxYIn);
+		if (this.rotY < dist) dist = this.rotY;
+		final float range = maxYIn/15;
+		return dist < range ? dist/range : 1.0F;
 	}
 }

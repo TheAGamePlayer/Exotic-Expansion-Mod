@@ -1,0 +1,11 @@
+{
+  "type": "blightedworlds:the_ancient_nether",
+  "generator": {
+    "type": "minecraft:noise",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "preset": "minecraft:nether"
+    },
+    "settings": "blightedworlds:ancient_nether"
+  }
+}
