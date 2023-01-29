@@ -46,11 +46,8 @@ public final class AncientNetherAltarBlock extends Block {
 	@Override
 	public final InteractionResult use(final BlockState stateIn, final Level levelIn, final BlockPos posIn, final Player playerIn, final InteractionHand handIn, final BlockHitResult hitIn) {
 		if (stateIn.getValue(HAS_ORB) == true) {
-			if (this.placedPortal(stateIn, levelIn, posIn)) {
-				playerIn.moveTo(posIn, playerIn.getYRot(), -90.00F);
-				playerIn.lerpMotion(0.0D, 1.0D, 0.0D);
-			}
-			return InteractionResult.SUCCESS;
+			if (!this.placedPortal(stateIn, levelIn, posIn))
+				return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;
 	}
@@ -58,11 +55,17 @@ public final class AncientNetherAltarBlock extends Block {
 	public final boolean placedPortal(final BlockState stateIn, final LevelAccessor levelIn, final BlockPos posIn) { //LevelAccessor used for Auto Activation in Ancient Nether
 		final BlockPos height = posIn.above(6);
 		if (levelIn.getBlockState(height) == Blocks.AIR.defaultBlockState()) {
-			if (stateIn.getValue(HAS_ORB) && levelIn.getBlockState(height) == Blocks.AIR.defaultBlockState() && levelIn.getBlockState(posIn).getBlock() == BWBlocks.ANCIENT_NETHER_ALTAR.get())
+			if (levelIn.getBlockState(posIn).getBlock() == BWBlocks.ANCIENT_NETHER_ALTAR.get() && stateIn.getValue(HAS_ORB))
 				levelIn.setBlock(height, BWBlocks.ANCIENT_NETHER_PORTAL.get().defaultBlockState(), 2);
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public final void destroy(final LevelAccessor levelIn, final BlockPos posIn, final BlockState stateIn) {
+		if (this.placedPortal(stateIn, levelIn, posIn))
+			levelIn.destroyBlock(posIn.above(6), dynamicShape);
 	}
 
 	@Override

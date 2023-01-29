@@ -6,8 +6,10 @@ import java.util.function.Function;
 
 import dev.theagameplayer.blightedworlds.data.tags.BWStructureTags;
 import dev.theagameplayer.blightedworlds.registries.BWBlocks;
-import dev.theagameplayer.blightedworlds.registries.other.BWDimensions;
+import dev.theagameplayer.blightedworlds.world.level.PortalMode;
 import dev.theagameplayer.blightedworlds.world.level.block.AncientNetherAltarBlock;
+import dev.theagameplayer.blightedworlds.world.level.block.AncientNetherPortalBlock;
+import dev.theagameplayer.blightedworlds.world.level.block.entity.AncientNetherPortalBlockEntity;
 import dev.theagameplayer.blightedworlds.world.level.levelgen.structure.TeleportDestinationPiece;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.core.BlockPos;
@@ -40,13 +42,17 @@ public final class BWTeleporter implements ITeleporter {
 					final SectionPos sectionPos = SectionPos.of(new ChunkPos(l), destLevelIn.getMinSection());
 					final StructureStart start = destLevelIn.structureManager().getStartForStructure(sectionPos, entry.getKey(), destLevelIn.getChunk(sectionPos.x(), sectionPos.z(), ChunkStatus.STRUCTURE_STARTS));
 					for (final StructurePiece piece : start.getPieces()) {
-						if (piece instanceof TeleportDestinationPiece) {
-							final BlockPos altarPos = ((TeleportDestinationPiece)piece).getDestination();
-							if (destLevelIn.getBlockState(altarPos).getBlock() == BWBlocks.ANCIENT_NETHER_ALTAR.get() && destLevelIn.dimension() == BWDimensions.ANCIENT_NETHER) {
-								if (!destLevelIn.getBlockState(altarPos).getValue(AncientNetherAltarBlock.HAS_ORB)) {
-									destLevelIn.setBlock(altarPos, destLevelIn.getBlockState(altarPos).setValue(AncientNetherAltarBlock.HAS_ORB, Boolean.valueOf(true)), 2);
+						if (piece instanceof TeleportDestinationPiece destinationPiece) {
+							final BlockPos altarPos = destinationPiece.getDestination();
+							if (destLevelIn.getBlockState(altarPos).getBlock() == BWBlocks.ANCIENT_NETHER_ALTAR.get()) {
+								final BlockPos height = altarPos.above(6);
+								if (!destLevelIn.getBlockState(altarPos).getValue(AncientNetherAltarBlock.HAS_ORB))
+									destLevelIn.setBlockAndUpdate(altarPos, destLevelIn.getBlockState(altarPos).setValue(AncientNetherAltarBlock.HAS_ORB, Boolean.valueOf(true)));
+								if (!((AncientNetherAltarBlock)destLevelIn.getBlockState(altarPos).getBlock()).placedPortal(destLevelIn.getBlockState(altarPos), destLevelIn, altarPos)) {
+								} else {
+									destLevelIn.setBlockAndUpdate(height, destLevelIn.getBlockState(height).setValue(AncientNetherPortalBlock.PORTAL_MODE, PortalMode.INACTIVE));
+									((AncientNetherPortalBlockEntity)destLevelIn.getBlockEntity(height)).setReactivationCount(600);
 								}
-								if (!((AncientNetherAltarBlock)destLevelIn.getBlockState(altarPos).getBlock()).placedPortal(destLevelIn.getBlockState(altarPos), destLevelIn, altarPos)) {}
 							}
 							return new PortalInfo(altarPos.relative(destLevelIn.getBlockState(altarPos).getValue(AncientNetherAltarBlock.FACING)).getCenter(), Vec3.ZERO, entityIn.getYRot(), entityIn.getXRot());
 						}

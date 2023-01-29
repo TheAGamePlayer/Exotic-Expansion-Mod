@@ -19,7 +19,7 @@ import net.minecraftforge.registries.RegistryObject;
 public final class BWEntityTypes {
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, BlightedWorldsMod.MODID);
 
-	public static final RegistryObject<EntityType<SpawnerSlime>> SPAWNER_SLIME = register("spawner_slime", EntityType.Builder.of(SpawnerSlime::new, MobCategory.MONSTER).sized(2.04F, 2.04F).setTrackingRange(10));
+	public static final RegistryObject<EntityType<SpawnerSlime>> SPAWNER_SLIME = register("spawner_slime", EntityType.Builder.of(SpawnerSlime::new, MobCategory.MONSTER).fireImmune().sized(2.04F, 2.04F).setTrackingRange(10));
 			
 	private static final <E extends Entity> RegistryObject<EntityType<E>> register(final String nameIn, final EntityType.Builder<E> entityTypeIn) {
 		return ENTITY_TYPES.register(nameIn, () -> entityTypeIn.build(nameIn));

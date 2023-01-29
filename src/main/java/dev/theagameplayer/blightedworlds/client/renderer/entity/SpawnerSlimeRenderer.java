@@ -16,13 +16,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
-public final class SpawnerSlimeRenderer extends MobRenderer<SpawnerSlime, SpawnerSlimeModel<SpawnerSlime>> {
-	private static final ResourceLocation SPAWNER_SLIME_TEXTURES = new ResourceLocation(BlightedWorldsMod.MODID, "textures/entity/spawner_slime.png");
-	private static final ResourceLocation INACTIVE_SPAWNER_SLIME_TEXTURES = new ResourceLocation(BlightedWorldsMod.MODID, "textures/entity/inactive_spawner_slime.png");
+public final class SpawnerSlimeRenderer extends MobRenderer<SpawnerSlime, SpawnerSlimeModel> {
+	private static final ResourceLocation SPAWNER_SLIME_TEXTURES = BlightedWorldsMod.namespace("textures/entity/spawner_slime.png");
+	private static final ResourceLocation INACTIVE_SPAWNER_SLIME_TEXTURES = BlightedWorldsMod.namespace("textures/entity/inactive_spawner_slime.png");
 
 	public SpawnerSlimeRenderer(final EntityRendererProvider.Context contextIn) {
-		super(contextIn, new SpawnerSlimeModel<>(contextIn.bakeLayer(BWModelLayers.SPAWNER_SLIME)), 0.25F);
-		this.addLayer(new SpawnerSlimeOuterLayer<>(this, contextIn.getModelSet()));
+		super(contextIn, new SpawnerSlimeModel(contextIn.bakeLayer(BWModelLayers.SPAWNER_SLIME)), 0.25F);
+		this.addLayer(new SpawnerSlimeOuterLayer(this, contextIn.getModelSet()));
 	}
 
 	@Override

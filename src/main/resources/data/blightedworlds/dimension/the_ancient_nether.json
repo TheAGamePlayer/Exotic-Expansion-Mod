@@ -1,11 +1,12 @@
 {
   "type": "blightedworlds:the_ancient_nether",
   "generator": {
-    "type": "minecraft:noise",
+    "type": "blightedworlds:cavern",
     "biome_source": {
       "type": "minecraft:multi_noise",
       "preset": "minecraft:nether"
     },
+    "cavern_settings": "blightedworlds:ancient_nether",
     "settings": "blightedworlds:ancient_nether"
   }
 }

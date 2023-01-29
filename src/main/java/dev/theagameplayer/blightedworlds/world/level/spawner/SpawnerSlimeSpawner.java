@@ -5,7 +5,6 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import dev.theagameplayer.blightedworlds.BlightedWorldsMod;
@@ -31,7 +30,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public abstract class SpawnerSlimeSpawner { //Code from BaseSpawner.class
-	private static final Logger LOGGER = LogManager.getLogger(BlightedWorldsMod.MODID);
+	private static final Logger LOGGER = BlightedWorldsMod.LOGGER;
 	private SimpleWeightedRandomList<SpawnData> spawnPotentials = SimpleWeightedRandomList.empty();
 	private SpawnData nextSpawnData = new SpawnData();
 	private double spin;

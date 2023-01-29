@@ -1,5 +1,6 @@
 package dev.theagameplayer.blightedworlds.client.model;
 
+import dev.theagameplayer.blightedworlds.world.entity.monster.SpawnerSlime;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -8,9 +9,8 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.world.entity.monster.Slime;
 
-public final class SpawnerSlimeModel<E extends Slime> extends HierarchicalModel<E> {
+public final class SpawnerSlimeModel extends HierarchicalModel<SpawnerSlime> {
 	private final ModelPart root;
 
 	public SpawnerSlimeModel(final ModelPart rootIn) {
@@ -35,7 +35,7 @@ public final class SpawnerSlimeModel<E extends Slime> extends HierarchicalModel<
 	}
 
 	@Override
-	public final void setupAnim(final E entityIn, final float limbSwingIn, final float limbSwingAmountIn, final float ageInTicksIn, final float netHeadYawIn, final float headPitchIn) {}
+	public final void setupAnim(final SpawnerSlime entityIn, final float limbSwingIn, final float limbSwingAmountIn, final float ageInTicksIn, final float netHeadYawIn, final float headPitchIn) {}
 
 	@Override
 	public final ModelPart root() {

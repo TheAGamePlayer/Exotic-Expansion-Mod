@@ -8,7 +8,6 @@ import dev.theagameplayer.blightedworlds.world.level.levelgen.structure.structur
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
@@ -18,7 +17,7 @@ import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 
 public final class BWStructures {
-	public static final ResourceKey<Structure> INFERNAL_FORTRESS = ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(BlightedWorldsMod.MODID, "infernal_fortress"));
+	public static final ResourceKey<Structure> INFERNAL_FORTRESS = ResourceKey.create(Registries.STRUCTURE, BlightedWorldsMod.namespace("infernal_fortress"));
 	
 	public static final void bootstrap(final BootstapContext<Structure> contextIn) {
 		contextIn.register(INFERNAL_FORTRESS, new InfernalNetherFortressStructure(settings(contextIn, BWBiomeTags.HAS_INFERNAL_NETHER_FORTRESS, Map.of(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.PIECE, InfernalNetherFortressStructure.FORTRESS_ENEMIES)), GenerationStep.Decoration.UNDERGROUND_DECORATION, TerrainAdjustment.NONE)));

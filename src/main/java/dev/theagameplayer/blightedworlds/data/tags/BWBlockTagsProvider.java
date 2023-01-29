@@ -20,7 +20,7 @@ public final class BWBlockTagsProvider extends BlockTagsProvider {
 	protected final void addTags(final HolderLookup.Provider lookupProviderIn) {
 		//Minecraft
 		this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(BWBlocks.RED_NETHER_BRICK_FENCE.get());
-		this.tag(BlockTags.NEEDS_DIAMOND_TOOL).add(BWBlocks.ANCIENT_NETHER_ALTAR.get());
+		this.tag(BlockTags.NEEDS_DIAMOND_TOOL);
 		this.tag(BlockTags.FENCES).add(BWBlocks.RED_NETHER_BRICK_FENCE.get());
 		//Forge
 		this.tag(Tags.Blocks.FENCES_NETHER_BRICK).add(BWBlocks.RED_NETHER_BRICK_FENCE.get());

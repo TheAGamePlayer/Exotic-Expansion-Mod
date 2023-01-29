@@ -50,7 +50,7 @@ public final class SpawnerSlime extends Slime {
 		};
 		this.spawner.setEntityId(entityTypeIn);
 		this.ticker = this.getLevel() instanceof ServerLevel ? () -> {
-			this.spawner.serverTick((ServerLevel)this.getLevel(), this.blockPosition(), this.getTarget() != null);
+			this.spawner.serverTick((ServerLevel)this.getLevel(), this.blockPosition(), this.getTarget() != null || this.isInLava());
 		} : () -> {
 			this.spawner.clientTick(this.getLevel(), this.blockPosition());
 		};

@@ -24,7 +24,7 @@ public final class BWBlocks {
 	public static final RegistryObject<AncientNetherAltarBlock> ANCIENT_NETHER_ALTAR  = BLOCKS.register("ancient_nether_altar", () -> new AncientNetherAltarBlock(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).sound(SoundType.NETHERITE_BLOCK).lightLevel((block) -> {
 		return block.getValue(AncientNetherAltarBlock.HAS_ORB) ? 15 : 0;
 	}).strength(-1.0F, 3600000.0F).noLootTable()));
-	public static final RegistryObject<AncientNetherPortalBlock> ANCIENT_NETHER_PORTAL = BLOCKS.register("ancient_nether_portal", () -> new AncientNetherPortalBlock(BlockBehaviour.Properties.of(Material.PORTAL, MaterialColor.COLOR_RED).noCollission().lightLevel((block) -> {
-		return 15;
-	}).strength(-1.0F, 3600000.0F).noLootTable()));
+	public static final RegistryObject<AncientNetherPortalBlock> ANCIENT_NETHER_PORTAL = BLOCKS.register("ancient_nether_portal", () -> new AncientNetherPortalBlock(BlockBehaviour.Properties.of(Material.PORTAL).sound(SoundType.GLASS).noCollission().lightLevel((block) -> {
+		return 11;
+	}).strength(-1.0F).noLootTable()));
 }

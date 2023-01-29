@@ -15,6 +15,7 @@ import dev.theagameplayer.blightedworlds.data.tags.BWItemTagsProvider;
 import dev.theagameplayer.blightedworlds.data.tags.BWStructureTagsProvider;
 import dev.theagameplayer.blightedworlds.registries.BWBlockEntityTypes;
 import dev.theagameplayer.blightedworlds.registries.BWBlocks;
+import dev.theagameplayer.blightedworlds.registries.BWChunkGenerators;
 import dev.theagameplayer.blightedworlds.registries.BWEntityTypes;
 import dev.theagameplayer.blightedworlds.registries.BWItems;
 import dev.theagameplayer.blightedworlds.registries.BWParticleTypes;
@@ -23,6 +24,7 @@ import dev.theagameplayer.blightedworlds.registries.BWStructureTypes;
 import dev.theagameplayer.blightedworlds.registries.other.BWLayerDefinitions;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -37,13 +39,13 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 @Mod(value = BlightedWorldsMod.MODID)
 public final class BlightedWorldsMod {
 	public static final String MODID = "blightedworlds";
-	private static final Logger LOGGER = LogManager.getLogger(MODID);
+	public static final Logger LOGGER = LogManager.getLogger(MODID);
 	
 	public BlightedWorldsMod() {
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		this.createConfig();
-		this.registerAll(modEventBus);
 		this.createRegistries(modEventBus);
+		this.registerAll(modEventBus);
 		modEventBus.addListener(this::commonSetup);
 		modEventBus.addListener(this::clientSetup);
 		modEventBus.addListener(this::gatherData);
@@ -52,11 +54,20 @@ public final class BlightedWorldsMod {
 		this.attachCommonEventListeners(modEventBus, MinecraftForge.EVENT_BUS);
 	}
 	
+	public static final ResourceLocation namespace(final String nameIn) {
+		return new ResourceLocation(MODID, nameIn);
+	}
+	
 	private final void createConfig() {
 		LOGGER.info("Created mod config.");
 	}
 	
+	private final void createRegistries(final IEventBus busIn) {
+		LOGGER.info("Created custom registries.");
+	}
+	
 	private final void registerAll(final IEventBus busIn) {
+		//Vanilla
 		BWBlocks.BLOCKS.register(busIn);
 		BWItems.ITEMS.register(busIn);
 		BWBlockEntityTypes.BLOCK_ENTITY_TYPES.register(busIn);
@@ -64,11 +75,8 @@ public final class BlightedWorldsMod {
 		BWParticleTypes.PARTICLE_TYPES.register(busIn);
 		BWStructureTypes.STRUCTURE_TYPES.register(busIn);
 		BWStructurePieceTypes.STRUCTURE_PIECE_TYPES.register(busIn);
+		BWChunkGenerators.CHUNK_GENERATORS.register(busIn);
 		LOGGER.info("Registered all event buses.");
-	}
-	
-	private final void createRegistries(final IEventBus busIn) {
-		LOGGER.info("Created custom registries.");
 	}
 	
 	private final void attachClientEventListeners(final IEventBus modBusIn, final IEventBus forgeBusIn) {
@@ -81,6 +89,7 @@ public final class BlightedWorldsMod {
 	
 	private final void attachCommonEventListeners(final IEventBus modBusIn, final IEventBus forgeBusIn) {
 		//Registers
+		modBusIn.addListener(BWRegistriesDatapackProvider::registerDatapackRegistries);
 		modBusIn.addListener(BWEntityTypes::registerEntityAttributes);
 		modBusIn.addListener(BWEntityTypes::registerEntitySpawnPlacements);
 		modBusIn.addListener(BWItems::registerCreativeModeTabs);

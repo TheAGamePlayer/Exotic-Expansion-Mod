@@ -2,7 +2,6 @@ package dev.theagameplayer.blightedworlds.registries.other;
 
 import dev.theagameplayer.blightedworlds.BlightedWorldsMod;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.resources.ResourceLocation;
 
 public final class BWModelLayers {
 	//Block Entities
@@ -15,6 +14,6 @@ public final class BWModelLayers {
 	}
 
 	private static final ModelLayerLocation register(final String name1n, final String name2n) { //TODO: Add to list?
-		return new ModelLayerLocation(new ResourceLocation(BlightedWorldsMod.MODID, name1n), name2n);
+		return new ModelLayerLocation(BlightedWorldsMod.namespace(name1n), name2n);
 	}
 }
