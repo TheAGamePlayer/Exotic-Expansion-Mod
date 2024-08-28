@@ -1,0 +1,18 @@
+{
+  "cavern_floors": [
+    {
+      "floor_height": 64,
+      "max_pillar_size": 3,
+      "min_pillar_size": 1,
+      "pillar_layers": 0,
+      "pillar_rarity": 0.0034722232
+    },
+    {
+      "floor_height": 256,
+      "max_pillar_size": 7,
+      "min_pillar_size": 1,
+      "pillar_layers": 3,
+      "pillar_rarity": 0.0026041667
+    }
+  ]
+}

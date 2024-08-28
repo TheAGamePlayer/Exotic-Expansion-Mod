@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"hanging=false": {
+			"model": "exoticexpansion:block/blaze_lantern"
+		},
+		"hanging=true": {
+			"model": "exoticexpansion:block/blaze_lantern_hanging"
+		}
+	}
+}

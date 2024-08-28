@@ -1,0 +1,12 @@
+{
+  "type": "exoticexpansion:the_ancient_nether",
+  "generator": {
+    "type": "exoticexpansion:cavern",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "preset": "exoticexpansion:ancient_nether"
+    },
+    "cavern_settings": "exoticexpansion:ancient_nether",
+    "settings": "exoticexpansion:ancient_nether"
+  }
+}

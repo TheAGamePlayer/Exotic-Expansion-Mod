@@ -1,0 +1,14 @@
+{
+	"itemGroup.exoticexpansion": "Exotic Expansion",
+	
+	"block.exoticexpansion.red_nether_brick_fence": "Red Nether Brick Fence",
+	"block.exoticexpansion.blaze_lantern": "Blaze Lantern",
+	"block.exoticexpansion.ancient_nether_altar": "Ancient Nether Altar",
+	"block.exoticexpansion.ancient_nether_portal": "Ancient Nether Portal",
+	
+	"item.exoticexpansion.altar_activation_orb": "Altar Activation Orb",
+	"item.exoticexpansion.animated_eye": "Animated Eye",
+	"item.exoticexpansion.spawner_slime_spawn_egg": "Spawner Slime Spawn Egg",
+
+	"entity.exoticexpansion.spawner_slime": "Spawner Slime"
+}

@@ -1,2 +1,2 @@
-# Blighted-Worlds-Mod
+# Exotic-Expansion-Mod
 :>

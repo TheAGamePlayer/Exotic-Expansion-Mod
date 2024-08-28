@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "dev.theagameplayer.exoticexpansion.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"refmap": "exoticexpansion.refmap.json",
+	"mixins": [
+		"ChunkStorageMixin"
+	],
+	"client": [],
+	"server": [],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"minVersion": "0.8.7"
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "1": {
+      "item": "minecraft:red_nether_bricks"
+    },
+    "2": {
+      "item": "minecraft:nether_brick"
+    },
+    "3": {
+      "item": "minecraft:nether_wart"
+    }
+  },
+  "pattern": [
+    "131",
+    "121"
+  ],
+  "result": {
+    "count": 6,
+    "id": "exoticexpansion:red_nether_brick_fence"
+  }
+}
